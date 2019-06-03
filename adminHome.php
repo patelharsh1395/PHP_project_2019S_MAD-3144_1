@@ -1,4 +1,17 @@
 <!DOCTYPE html>
+<?php    
+// session_start();
+// if(isset($_SESSION["admin"]))
+// {
+        
+// }
+// else {
+//     header("Location: adminLogin.php"); 
+// }
+
+
+
+ ?>
 <html>
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -41,6 +54,10 @@ body {font-family: Arial;}
   border: 1px solid #ccc;
   border-top: none;
 }
+body
+{
+border : 2px solid black;
+}
 </style>
 </head>
 <body>
@@ -54,18 +71,19 @@ body {font-family: Arial;}
 
 <div id="Users" class="tabcontent">
   <h3>Users</h3>
-  <p>This is users page</p>
+  <p><?php include 'Users.php';?></p>
 </div>
 
 <div id="Exams" class="tabcontent">
   <h3>Exam Page</h3>
-  <p>Exam Page</p> 
+  <p><?php include 'Exams.php';?></p> 
 </div>
 
 
 
 <script>
-function openTab(evt, cityName) {
+
+function openTab(evt, tab) {
   var i, tabcontent, tablinks;
   tabcontent = document.getElementsByClassName("tabcontent");
   for (i = 0; i < tabcontent.length; i++) {
@@ -75,8 +93,9 @@ function openTab(evt, cityName) {
   for (i = 0; i < tablinks.length; i++) {
     tablinks[i].className = tablinks[i].className.replace(" active", "");
   }
-  document.getElementById(cityName).style.display = "block";
+  document.getElementById(tab).style.display = "block";
   evt.currentTarget.className += " active";
+  
 }
 </script>
    
