@@ -25,7 +25,7 @@ function create_new_exam($desc)
     $result = mysqli_query($conn, $sql);
     
     if (!$result) {
-        die('Could not enter data: ' . mysql_error());
+        die('Could not enter data: ' . mysqli_error());
         
     }
     mysqli_close($conn);

@@ -2,13 +2,98 @@
 
 
 session_start();
-// if()
-// {
+$eid = $_GET["eid"];
+
+
+function validate()
+{
     
-// }
+}
+function insert_question_options($eid, $question , $option1, $option2, $option3, $option4 )
+{
+   
+  
+    $conn = mysqli_connect('localhost:3306', 'root', '','questioneers');
+  
+    // Check connection
+    if (!$conn) {
+        die("Connection failed: ".mysqli_connect_error());
+    }
+    $sql = "insert into questions(eid,question) values(".$eid.",'".$question."');";
+    
+    
+    $result = mysqli_query($conn, $sql);
+    if (!$result) {
+        die('Could not enter data: ' . mysqli_error($conn));
+        
+    }
+     else 
+    {   
+       
+    
+        $sql = "insert into options(qid, option) values((select max(qid) from questions),'".$option1."');";
+        $result = mysqli_query($conn, $sql);
+        $sql = "insert into options(qid, option) values((select max(qid) from questions),'".$option2."');";
+        $result = mysqli_query($conn, $sql);
+        $sql = "insert into options(qid, option) values((select max(qid) from questions),'".$option3."');";
+        $result = mysqli_query($conn, $sql);
+        $sql = "insert into options(qid, option) values((select max(qid) from questions),'".$option4."');";
+        $result = mysqli_query($conn, $sql);
+        
+    }
+    
+    mysqli_close($conn);
+}
+function update_data($eid)
+{
+   
+    
+    // Create connection
+    $conn = mysqli_connect('localhost:3306', 'root', '','questioneers');
+    // Check connection
+    if (!$conn) {
+        die("Connection failed: " . mysqli_connect_error());
+    }
+    
+    $sql = "select qid, question from questions where eid=".$eid."; ";
+    $result = mysqli_query($conn, $sql);
+    $count_question = 0;
+    if (mysqli_num_rows($result) > 0) {
+        
+        echo "<form method='post' name='Form2'  action=''> ";
+        while($row = mysqli_fetch_assoc($result)) {
+            $count_question+=1;
+            echo "<br>Question ".$count_question." : <input type='text' name='quest_options' required value='".$row["question"]."'>";
+            $sql_options = "select  opt_id , option from options where qid = ".$row["qid"].";";
+            $result_options = mysqli_query($conn, $sql_options);
+            if(mysqli_num_rows($result_options) > 0)
+            {
+                $count_options = 0;
+                
+                while ($row_options = mysqli_fetch_assoc($result_options) ) {
+                    $count_options+=1;
+                    echo "<br>option ".$count_options." : <input type='text' name=".$row_options['opt_id']." value='".$row_options['option']."' required>";
+                }
+                echo "<br><button type='button' class='button' onclick=''>update</button>";
+            }
+           
+        }
+        echo "</form>";
+    } else {
+        echo "0 results";
+    }
+    
+    mysqli_close($conn);
+}
 
-
-
+if(isset($_POST["quest"]) & isset($_POST["answer_a"]) & isset($_POST["answer_b"]) & isset($_POST["answer_c"]) & isset($_POST["answer_d"]) )
+{
+    echo "inside if";
+    insert_question_options($eid,$_POST["quest"], $_POST["answer_a"], $_POST["answer_b"], $_POST["answer_c"], $_POST["answer_d"]);
+}
+else {
+    echo "Hello world";
+}
 
 ?>
 <html><head>
@@ -47,59 +132,82 @@ hr {
 </style>
 <script type="text/javascript">
 
-function validateForm()
+function validateForm($form)
 {
-    var a=document.getElementByName("answer_a").value;
-    var b=document.getElementByName("answer_b").value;
-    var c=document.getElementByName("answer_c").value;
-    var d=document.getElementByName("answer_d").value;
-    var e=document.getElementByName("answer_e").value;
-    if (a== null || a== "",b == null || b == "",c == null || c == "",d==null || d == "", e == null || e=="")
-    {
-        alert("Please Fill All Required Field");
-        return false;
-    }
+
+// 	    var a=document.Form.answer_a.value;
+// 	    var b=document.forms["Form"]["answer_b"].value;
+// 	    var c=document.forms["Form"]["answer_c"].value;
+// 	    var d=document.forms["Form"]["answer_d"].value;
+// 	    var e=document.forms["Form"]["answer_e"].value;
+	if($form=="Form")
+	{
+        var a=document.Form.answer_a.value;
+        var b=document.Form.answer_b.value;
+        var c=document.Form.answer_c.value;
+        var d=document.Form.answer_d.value;
+        var e=document.Form.quest.value;
+            if (a.trim()==null || a.trim()== "" || b.trim() == null || b.trim()== "" || c.trim() == null || c.trim()== "" || d.trim()==null || d.trim() == "" || e.trim()== null || e.trim()=="")
+            {
+                alert("Please Fill All Required Field");
+                return false;
+            }
+            else
+            {
+               
+            	  document.forms["Form"].submit();
+            }
+	}
+	else
+	{
+		var a=document.Form.answer_a.value;
+        var b=document.Form.answer_b.value;
+        var c=document.Form.answer_c.value;
+        var d=document.Form.answer_d.value;
+        var e=document.Form.quest.value;
+		if (a.trim()==null || a.trim()== "" || b.trim() == null || b.trim()== "" || c.trim() == null || c.trim()== "" || d.trim()==null || d.trim() == "" || e.trim()== null || e.trim()=="")
+        {
+            alert("Please Fill All Required Field");
+            return false;
+        }
+        else
+        {
+           
+        	  document.forms["Form"].submit();
+        }
+		
+	}
 }
 </script>
 </head>
 <body>
 
-<?php 
 
-
-
-?>
-update
+new
 <br>
-<form method="post"   action="">
-Question : <input type="text" name="answer_e">
+<form method="post" name="Form"  action="">
+Question : <input type="text" name="quest" required>
 <br>
-option 1 : <input type="text" name="answer_a">
+option 1 : <input type="text" name="answer_a" required>
 <br>
-option 2 : <input type="text" name="answer_b">
+option 2 : <input type="text" name="answer_b" required>
 <br>
-option 3 : <input type="text" name="answer_c">
+option 3 : <input type="text" name="answer_c" required>
 <br>
-option 4 : <input type="text" name="answer_d">
+option 4 : <input type="text" name="answer_d" required>
 <br>
-<input type="submit" class="button" onclick="validateForm()" value="submit">
+<button type="button" class="button" onclick="validateForm('Form')">Submit</button>
 </form>
 <hr>
+ </form>
+ 
+ 
+ <?php 
+ 
+ update_data($eid);
+ 
+ ?>
 
-new 
-
-<form method="post" action="">
-Question : <input type="text" name="exam_description">
-<br>
-option 1 : <input type="text" name="exam_description">
-<br>
-option 2 : <input type="text" name="exam_description">
-<br>
-option 3 : <input type="text" name="exam_description">
-<br>
-option 4 : <input type="text" name="exam_description">
-<br>
-<input type="submit" class="button" value="submit">
 
 
 </body>
