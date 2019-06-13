@@ -6,9 +6,25 @@ if(!isset($_SESSION['user_id']) & !isset($_SESSION['name']))
 }
 
 
-if(!isset($_SESSION['question_queue']))
+
+if(isset($_SESSION['eid']))
 {
+    unset($_SESSION['eid']);
+}
+if(isset($_SESSION['question_queue']))
+{
+    unset($_SESSION['question_queue']);
     
+}
+
+if(isset($_SESSION['question_counter']))
+{
+    unset($_SESSION['question_counter']);
+}
+
+if(isset($_SESSION['score']))
+{
+    unset($_SESSION['score']);
 }
 
 
@@ -111,7 +127,7 @@ display_data("select * from exam");
 
 
 ?>
-</form>
+
 </body>
 </html>
 

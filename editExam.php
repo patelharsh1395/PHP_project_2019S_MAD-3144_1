@@ -174,7 +174,7 @@ function generate_update_data($eid)
 
                 echo "</select>";
                 echo "<input type='hidden' name='question_id' value=".$row['qid'].">";
-                echo "<br><input type='submit' value='update'>";
+                echo "<br><input type='submit' value='update' class='button'>";
                     
             }
             echo "</form>";
@@ -322,15 +322,20 @@ function validateForm($form)
             }
 	}
 }
-	
+function backToHome()
+{
+	window.location.href = "adminHome.php";
+}
 
 </script>
 </head>
 <body>
 
 
-new
+
 <br>
+
+<button type='button' class='button' onclick='backToHome()' >back</button>
 <form method="post" name="Form"  action="">
 Question : <input type="text" name="quest" required>
 <br>
