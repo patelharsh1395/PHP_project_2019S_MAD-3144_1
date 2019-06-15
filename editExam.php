@@ -2,14 +2,24 @@
 
 
 session_start();
+$eid = 0;
 if(isset($_GET["eid"]))
 {
-    $eid = $_GET["eid"];
+   $eid = $_GET["eid"];
 }
 
 
+if(!isset($_SESSION['admin_id']))
+{
+    header("Location: adminLogin.php");
+}
 
 
+if(isset($_GET['logout']))
+{
+    unset($_SESSION['admin_id']);
+    header("Location: adminLogin.php");
+}
 
 function insert_question_options($eid, $question , $option1, $option2, $option3, $option4 , $ans)
 {
@@ -178,6 +188,11 @@ function generate_update_data($eid)
                     
             }
             echo "</form>";
+            echo "<form action='' method='post'>";
+            echo "<input type='hidden' name='delete_quest' value=".$row['qid'].">";
+            echo "<input type='submit' name='Delete' class='button' value='Delete'>";
+            echo "</form>";
+            
         }
         
     } else {
@@ -242,7 +257,25 @@ function update_value()
     
     mysqli_close($conn);
 }
-
+function deleteQuestion($qid)
+{
+    $conn = mysqli_connect('localhost:3306', 'root', '','questioneers');
+    // Check connection
+    if (!$conn) {
+        die("Connection failed: " . mysqli_connect_error());
+    }
+    
+    // sql to delete a record
+    $sql = "DELETE FROM questions WHERE qid=".$qid.";";
+    
+    if (mysqli_query($conn, $sql)) {
+        echo "Record deleted successfully";
+    } else {
+        echo "Error deleting record: " . mysqli_error($conn);
+    }
+    
+    mysqli_close($conn);
+}
 
 if(isset($_POST["quest"]) & isset($_POST["answer_a"]) & isset($_POST["answer_b"]) & isset($_POST["answer_c"]) & isset($_POST["answer_d"]) & isset($_POST["ans"]) )
 {
@@ -252,8 +285,12 @@ if(isset($_POST["quest"]) & isset($_POST["answer_a"]) & isset($_POST["answer_b"]
 
 if(isset($_POST["quest_option"]) & isset($_POST["1_option"]) & isset($_POST["2_option"]) & isset($_POST["3_option"]) & isset($_POST["4_option"]))
 {
-    echo "inside if stat****";
+    
     update_value();
+}
+if(isset($_POST['delete_quest']))
+{
+    deleteQuestion($_POST['delete_quest']);
 }
 
 ?>
@@ -332,10 +369,17 @@ function backToHome()
 <body>
 
 
-
+ <form method='get'>
+   
+   <input type='submit' name='logout' value='logout' />
+  </form>
 <br>
 
 <button type='button' class='button' onclick='backToHome()' >back</button>
+<form method='get'>
+   
+   <input type='submit' name='logout' value='logout' />
+  </form>
 <form method="post" name="Form"  action="">
 Question : <input type="text" name="quest" required>
 <br>
@@ -356,6 +400,7 @@ option 4 : <input type="text" name="answer_d" required>
 </select>
 <button type="button" class="button" onclick="validateForm('Form')">Submit</button>
 </form>
+
 <hr>
 
  

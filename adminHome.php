@@ -1,17 +1,5 @@
 <!DOCTYPE html>
-<?php    
-// session_start();
-// if(isset($_SESSION["admin"]))
-// {
-        
-// }
-// else {
-//     header("Location: adminLogin.php"); 
-// }
 
-
-
- ?>
 <html>
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -61,12 +49,10 @@ border : 2px solid black;
 </style>
 </head>
 <body>
-
-
-
 <div class="tab">
-  <button class="tablinks" onclick="openTab(event, 'Users')">Users</button>
-  <button class="tablinks" onclick="openTab(event, 'Exams')">Exams</button>
+<script> openTab</script>
+  <button class="tablinks" id='b1' onclick="openTab(event, 'Users')">Users</button>
+  <button class="tablinks" id='b2' onclick="openTab(event, 'Exams')">Exams</button>
 </div>
 
 <div id="Users" class="tabcontent">
@@ -97,7 +83,8 @@ function openTab(evt, tab) {
   evt.currentTarget.className += " active";
   
 }
+document.getElementById("b2").click();
 </script>
-   
+  
 </body>
 </html> 

@@ -1,5 +1,37 @@
 <?php
-session_start();
+
+if(!isset($_SESSION['admin_id']))
+{
+    header("Location: adminLogin.php");
+}
+if(isset($_GET['logout']))
+{
+    unset($_SESSION['admin_id']);
+    header("Location: adminLogin.php");
+}
+if(isset($_POST['delete_exam']))
+{
+    deleteExam($_POST['delete_exam']);
+}
+function deleteExam($eid)
+{
+    $conn = mysqli_connect('localhost:3306', 'root', '','questioneers');
+    // Check connection
+    if (!$conn) {
+        die("Connection failed: " . mysqli_connect_error());
+    }
+    
+    // sql to delete a record
+    $sql = "DELETE FROM exam WHERE eid=".$eid.";";
+    
+    if (mysqli_query($conn, $sql)) {
+        echo "Record deleted successfully";
+    } else {
+        echo "Error deleting record: " . mysqli_error($conn);
+    }
+    
+    mysqli_close($conn);
+}
 function display_data($data)
 {
     
@@ -22,14 +54,23 @@ function display_data($data)
             if($counter < 2)
             {
                 $counter+=1;
-                echo "<td class='card' >".$row['ename']."<form  action='editExam.php'><button class='button' type='submit' name='eid' value=".$row["eid"].">open</form> </td>";
+                echo "<td class='card' >".$row['ename']."<form  action='editExam.php'><button class='button' type='submit' name='eid' value=".$row["eid"].">open</button></form>";
+                echo "<form action='' method='post'>";
+                echo "<input type='hidden' name='delete_exam' value=".$row['eid'].">";
+                echo "<input type='submit' class='button' name='Delete'  value='Delete'>";
+                echo "</form>";
+                echo "</td>";
             }
             else
             {
                 $counter=1;
                 echo "</tr><tr>";
-                echo "<td class='card' >".$row['ename']."<form  action='editExam.php'><button class='button' type='submit' name='eid' value=".$row["eid"].">open</form> </td>";;
-                
+                echo "<td class='card' >".$row['ename']."<form  action='editExam.php'><button class='button' type='submit' name='eid' value=".$row["eid"].">open</button></form>";
+                echo "<form action='' method='post'>";
+                echo "<input type='hidden' name='delete_exam' value=".$row['eid'].">";
+                echo "<input type='submit' class='button' name='Delete'  value='Delete'>";
+                echo "</form>";
+                echo "</td>";
             }
         }
         echo "</tr></table>";
@@ -93,21 +134,24 @@ function onclick_card(message)
 </script>
 </head>
 <body>
-
+<form method='get'>
+   
+   <input type='submit' name='logout' value='logout' />
+  </form>
 <?php 
 display_data("select * from exam");
 
 
-if(isset($_POST["exam_description"]))
-{
-    $_SESSION["exam_desc"] = $_POST["exam_description"];
-    header("Location: exam_desc_insert.php"); 
-}
+// if(isset($_POST["exam_description"]))
+// {
+//     $_SESSION["exam_desc"] = $_POST["exam_description"];
+//     header("Location: exam_desc_insert.php"); 
+// }
 
 
 
 ?>
-<form method="post" action="">
+<form method="post" action="exam_desc_insert.php">
 Exam description : <input type="text" name="exam_description">
 <input type="submit" class="button" value="submit">
 </form>

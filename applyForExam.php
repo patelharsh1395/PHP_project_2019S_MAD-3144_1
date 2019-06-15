@@ -121,6 +121,9 @@ function set_message(div_id, message)
 </script>
 </head>
 <body>
+<form action="usersHome.php" method='get'>
+<input class="button" type='submit' name="logout" value="logout"> 
+</form>
 <?php
 $queue = $_SESSION['question_queue'];
 echo "array count ".count($queue)."<br>";

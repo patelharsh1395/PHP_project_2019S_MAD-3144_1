@@ -2,8 +2,8 @@
 session_start();
 if(isset($_SESSION["exam_desc"]))
 {
-    create_new_exam($_SESSION["exam_desc"]);
-    unset($_SESSION["exam_desc"]);
+    create_new_exam($_POST["exam_description"]);
+    
     header("Location: adminHome.php");
    
     

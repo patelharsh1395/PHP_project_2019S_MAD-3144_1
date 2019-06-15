@@ -1,4 +1,9 @@
 <?php 
+if(!isset($_SESSION['user_id']) & !isset($_SESSION['name']))
+{
+    header("Location: userlogin.php");
+}
+
 session_start();
 if(isset($_GET['quiz']))
 {   

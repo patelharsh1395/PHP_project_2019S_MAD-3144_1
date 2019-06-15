@@ -2,6 +2,7 @@
 session_start();
 if(!isset($_SESSION['user_id']) & !isset($_SESSION['name']))
 {
+   
     header("Location: userlogin.php");
 }
 
@@ -26,7 +27,12 @@ if(isset($_SESSION['score']))
 {
     unset($_SESSION['score']);
 }
-
+if(isset($_GET['logout']))
+{
+    unset($_SESSION['user_id']);
+    unset($_SESSION['name']);
+    header("Location: userlogin.php");
+}
 
 function display_data($data)
 {
@@ -110,6 +116,7 @@ input[type=text] {
 
 </style>
 <script>
+
 function onclick_card(message)
 {
 	
@@ -121,8 +128,11 @@ function onclick_card(message)
 </script>
 </head>
 <body>
-
+<form action="" method='get'>
+<input type='submit' name="logout" value="logout"> 
+</form>
 <?php 
+
 display_data("select * from exam");
 
 
